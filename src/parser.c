@@ -1,15 +1,36 @@
+/*
+ * parser.c
+ * This file is part of mini, a library to parse INI files.
+ *
+ * Copyright (C) 2010 - Francisco Javier Cuadrado <fcocuadrado@gmail.com>
+ *
+ * mini is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * mini is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with mini; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, 
+ * Boston, MA  02110-1301  USA
+ */ 
 
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "ini_file.h"
+#include "mini_file.h"
 #include "readline.h"
 #include "strip.h"
 
 
-IniFile *ini = NULL;
+MiniFile *mini_file = NULL;
 
 
 /**
@@ -24,7 +45,7 @@ parse_line (char *line)
     char *start, *end, *equal;
     char *section, *key, *value;
     size_t section_len, key_len, value_len;
-    IniFile *tmp;
+    MiniFile *mini_file_tmp;
 
     /* Line can't be NULL */
     assert (line != NULL);
@@ -61,17 +82,15 @@ parse_line (char *line)
             strncpy (section, &start[1], section_len);
             section[section_len] = '\0';
 
-            printf ("section: %s\n", section);
-
-            tmp = ini_file_insert_section (ini, section);
-            if (tmp == NULL)
+            mini_file_tmp = mini_file_insert_section (mini_file, section);
+            if (mini_file_tmp == NULL)
                 return -1;
 
             break;
 
         /* Comment */
         case ';':
-            printf ("comment: %s\n", start);
+            /* Process comments here */
             break;
 
         default:
@@ -103,11 +122,9 @@ parse_line (char *line)
             strncpy (value, &equal[1], value_len);
             value[value_len] = '\0';
 
-            printf ("key: %s\n", key);
-            printf ("value: %s\n", value);
-
-            tmp = ini_file_insert_key_and_value (ini, key, value);
-            if (tmp == NULL)
+            mini_file_tmp = mini_file_insert_key_and_value (mini_file, key, 
+                                                            value);
+            if (mini_file_tmp == NULL)
                 return -1;
     }
 
@@ -115,6 +132,9 @@ parse_line (char *line)
 }
 
 
+/**
+ *  By now, only for testing purpose.
+ */
 int
 main (int argc, char *argv[])
 {
@@ -129,8 +149,8 @@ main (int argc, char *argv[])
         return -1;
     }
 
-    ini = ini_file_new (argv[1]);
-    if (ini == NULL) {
+    mini_file = mini_file_new (argv[1]);
+    if (mini_file == NULL) {
         fprintf (stderr, "%s: Not enough memory!\n", argv[0]);
         fclose (file);
         return -1;
@@ -149,12 +169,15 @@ main (int argc, char *argv[])
 
     fclose (file);
 
-    printf ("Number of sections: %ld\n", ini_file_get_number_of_sections (ini));
-    printf ("Number of keys (seccion_segunda): %ld\n", 
-            ini_file_get_number_of_keys (ini, "seccion_segunda"));
+    printf ("Number of sections: %ld\n", 
+            mini_file_get_number_of_sections (mini_file));
+    printf ("Number of keys (section2): %ld\n", 
+            mini_file_get_number_of_keys (mini_file, "section2"));
 
-    printf ("seccion_primera.clave11 = %s\n", 
-            ini_file_get_value (ini, "seccion_primera", "clave11"));
+    printf ("section1.key11 = %s\n", 
+            mini_file_get_value (mini_file, "section1", "key11"));
+
+    mini_file_free (mini_file);
 
     return 0;
 }
