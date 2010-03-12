@@ -18,29 +18,20 @@
  * along with mini; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, 
  * Boston, MA  02110-1301  USA
- */ 
+ */
 
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include "mini_file.h"
-#include "readline.h"
-#include "strip.h"
-
-
-MiniFile *mini_file = NULL;
+#include "parser.h"
 
 
 /**
  *  Parses a line readed from an INI file.
  *
+ *  @param mini_file A MiniFile structure to save all the parsed data.
  *  @param line A line readed from an INI file.
  *  @return The function returns a negative number, if the line can't be parsed.
  */
 static int
-parse_line (char *line)
+mini_parse_line (MiniFile *mini_file, char *line)
 {
     char *start, *end, *equal;
     char *section, *key, *value;
@@ -133,51 +124,46 @@ parse_line (char *line)
 
 
 /**
- *  By now, only for testing purpose.
+ *  Parses a given INI file generating a MiniFile structure.
+ *
+ *  @param file_name INI file path.
+ *  @return The return value is a MiniFile structure generated from the 
+ *          given INI file.
+ *          The function returns NULL, if the given INI file can't be parsed.
  */
-int
-main (int argc, char *argv[])
+MiniFile *
+mini_parse_file (const char *file_name)
 {
     char *line;
     FILE *file;
+    MiniFile *mini_file;
 
-    assert (argv[1] != NULL);
+    /* Filename can't be NULL */
+    assert (file_name != NULL);
 
-    file = fopen (argv[1], "r");
+    /* Create an empty MiniFile structure */
+    mini_file = mini_file_new (file_name);
+    if (mini_file == NULL)
+        return NULL;
+
+    file = fopen (file_name, "r");
     if (file == NULL) {
-        fprintf (stderr, "%s: Can't open '%s'!\n", argv[0], argv[1]);
-        return -1;
+        mini_file_free (mini_file);
+        return NULL;
     }
 
-    mini_file = mini_file_new (argv[1]);
-    if (mini_file == NULL) {
-        fprintf (stderr, "%s: Not enough memory!\n", argv[0]);
-        fclose (file);
-        return -1;
-    }
-
+    /* Read line and parse it */
     line = readline (file);
     while (!feof (file) && (line != NULL)) {
 
-        if (parse_line (line) < 0) {
-            fprintf (stderr, "%s: Can't parse line!\n", argv[0]);
+        if (mini_parse_line (mini_file, line) < 0)
             break;
-        }
 
         line = readline (file);
     }
 
     fclose (file);
 
-    printf ("Number of sections: %ld\n", 
-            mini_file_get_number_of_sections (mini_file));
-    printf ("Number of keys (section2): %ld\n", 
-            mini_file_get_number_of_keys (mini_file, "section2"));
-
-    printf ("section1.key11 = %s\n", 
-            mini_file_get_value (mini_file, "section1", "key11"));
-
-    mini_file_free (mini_file);
-
-    return 0;
+    return mini_file;
 }
+

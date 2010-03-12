@@ -2,7 +2,7 @@
 
 CC = gcc
 OPTS = -Wall -o
-OBJS = parser.o mini_file.o readline.o strip.o
+OBJS = main.o parser.o mini_file.o readline.o strip.o
 
 mini_parser: $(OBJS)
 	$(CC) $(OPTS) $@ $^
