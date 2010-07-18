@@ -2,9 +2,4 @@
 
 Mini is a small library, written in C, to parse INI files.
 
-== TODO ==
-
- * If a section appears twice or more, mini will save every section in a 
-   different Section structure instead of searching if the section already 
-   exists and saves it in the existing Section structure.
 
