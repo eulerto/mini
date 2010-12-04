@@ -2,4 +2,5 @@
 *.swp
 *.swa
 *.o
-*.ini
+*.lo
+*.la
