@@ -1,5 +1,5 @@
 /*
- * parser.c
+ * mini-parser.c
  * This file is part of mini, a library to parse INI files.
  *
  * Copyright (c) 2010, Francisco Javier Cuadrado <fcocuadrado@gmail.com>
@@ -28,7 +28,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "parser.h"
+#include "mini-parser.h"
 
 
 /**
@@ -50,7 +50,7 @@ mini_parse_line (MiniFile *mini_file, char *line)
     assert (line != NULL);
 
     /* Strip all whitespaces */
-    start = strip (line);
+    start = mini_strip (line);
 
     /* Empty line */
     if (strcmp (start, "") == 0) 
@@ -161,13 +161,13 @@ mini_parse_file (const char *file_name)
     }
 
     /* Read line and parse it */
-    line = readline (file);
+    line = mini_readline (file);
     while (!feof (file) && (line != NULL)) {
 
         if (mini_parse_line (mini_file, line) < 0)
             break;
 
-        line = readline (file);
+        line = mini_readline (file);
     }
 
     fclose (file);

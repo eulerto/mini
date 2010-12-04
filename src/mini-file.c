@@ -1,5 +1,5 @@
 /*
- * mini_file.c
+ * mini-file.c
  * This file is part of mini, a library to parse INI files.
  *
  * Copyright (c) 2010, Francisco Javier Cuadrado <fcocuadrado@gmail.com>
@@ -28,7 +28,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "mini_file.h"
+#include "mini-file.h"
 
 
 /**

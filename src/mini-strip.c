@@ -1,5 +1,5 @@
 /*
- * strip.c
+ * mini-strip.c
  * This file is part of mini, a library to parse INI files.
  *
  * Copyright (c) 2010, Francisco Javier Cuadrado <fcocuadrado@gmail.com>
@@ -28,7 +28,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "strip.h"
+#include "mini-strip.h"
 
 
 /**
@@ -38,7 +38,7 @@
  *  @return The return value is the stripped string.
  */
 char *
-lstrip (char *string)
+mini_lstrip (char *string)
 {
     char *p;
 
@@ -59,7 +59,7 @@ lstrip (char *string)
  *  @return The return value is the stripped string.
  */
 char *
-rstrip (char *string)
+mini_rstrip (char *string)
 {
     char *p;
     int pos;
@@ -88,15 +88,15 @@ rstrip (char *string)
  *  @return The return value is the stripped string.
  */
 char *
-strip (char *string)
+mini_strip (char *string)
 {
     char *ret;
 
     /* String can't be NULL */
     assert (string != NULL);
 
-    ret = lstrip (string);
-    ret = rstrip (ret);
+    ret = mini_lstrip (string);
+    ret = mini_rstrip (ret);
 
     return ret;
 }

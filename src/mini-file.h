@@ -1,5 +1,5 @@
 /*
- * strip.h
+ * mini-file.h
  * This file is part of mini, a library to parse INI files.
  *
  * Copyright (c) 2010, Francisco Javier Cuadrado <fcocuadrado@gmail.com>
@@ -28,20 +28,50 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef __STRIP_H__
-#define __STRIP_H__
+#ifndef __MINI_FILE_H__
+#define __MINI_FILE_H__
 
 #include <assert.h>
-#include <ctype.h>
-#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
+typedef struct _SectionData SectionData;
+struct _SectionData {
+    char *key;
+    char *value;
+    SectionData *next;
+};
 
-char *lstrip (char *string);
+typedef struct _Section Section;
+struct _Section {
+    char *name;
+    SectionData *data;
+    Section *next;
+};
 
-char *rstrip (char *string);
+typedef struct _MiniFile MiniFile;
+struct _MiniFile {
+    char *file_name;
+    Section *section;
+};
 
-char *strip (char *string);
 
-#endif /* __STRIP_H__ */
+MiniFile *mini_file_new (const char *file_name);
+
+void mini_file_free (MiniFile *mini_file);
+
+MiniFile *mini_file_insert_section (MiniFile *mini_file, const char *section);
+
+MiniFile *mini_file_insert_key_and_value (MiniFile *mini_file, const char *key, 
+                                          const char *value);
+
+unsigned int mini_file_get_number_of_sections (MiniFile *mini_file);
+
+unsigned int mini_file_get_number_of_keys (MiniFile *mini_file, 
+                                           const char *section);
+
+char *mini_file_get_value (MiniFile *mini_file, const char *section, 
+                           const char *key);
+
+#endif /* __MINI_FILE_H__ */
 

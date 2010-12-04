@@ -1,5 +1,5 @@
 /*
- * readline.h
+ * mini-parser.h
  * This file is part of mini, a library to parse INI files.
  *
  * Copyright (c) 2010, Francisco Javier Cuadrado <fcocuadrado@gmail.com>
@@ -28,19 +28,20 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef __READLINE_H__
-#define __READLINE_H__
+#ifndef __MINI_PARSER_H__
+#define __MINI_PARSER_H__
 
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#define EOL '\n'
-#define LINE_LEN 10
+#include "mini-file.h"
+#include "mini-readline.h"
+#include "mini-strip.h"
 
 
-char *readline (FILE *file);
+MiniFile *mini_parse_file (const char *file_name);
 
-#endif /* __READLINE_H__ */
+#endif /* __MINI_PARSER_H__ */
 
