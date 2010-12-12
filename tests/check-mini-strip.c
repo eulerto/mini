@@ -41,52 +41,61 @@
 
 
 /**
- *  Test mini_strip function giving a NULL value as the parameter.
+ *  Tests 'mini_strip' function providing strings with spaces as the parameter.
+ *  These strings can have right spaces, left spaces or both.
  */
-START_TEST (test_mini_strip_null)
+START_TEST (test_mini_strip_string_with_spaces)
 {
-    char *string = NULL;
+    char *string;
 
-    fail_unless (mini_strip (string) == NULL,
-                 "NULL should be returned on attempt to strip a NULL value");
+    /* String with right spaces */
+    string = strdup ("   " CHARSET);
+    fail_unless (strcmp (mini_strip (string), CHARSET) == 0,
+                 "String with left spaces hasn't been stripped correctly");
+    free (string);
+
+    /* String with left spaces */
+    string = strdup (CHARSET "   ");
+    fail_unless (strcmp (mini_strip (string), CHARSET) == 0,
+                 "String with right spaces hasn't been stripped correctly");
+    free (string);
+
+    /* String with right and left spaces */
+    string = strdup ("   " CHARSET "   ");
+    fail_unless (strcmp (mini_strip (string), CHARSET) == 0,
+                 "String with right and left spaces hasn't been stripped "
+                 "correctly");
+    free (string);
 }
 END_TEST
 
 /**
- *  Test mini_strip function giving a string without spaces as the parameter.
+ *  Tests 'mini_strip' function providing strings without spaces as the
+ *  parameter. These strings can be an empty string or a regular string.
  */
 START_TEST (test_mini_strip_string_without_spaces)
 {
-    char *string = strdup (CHARSET);
+    char *string;
 
-    fail_unless (strcmp (mini_strip (string), CHARSET) == 0,
-                 "String without spaces isn't stripped correctly");
-
+    /* Empty string */
+    string = strdup ("");
+    fail_unless (strcmp (mini_strip (string), "") == 0,
+                 "Emtpy string hasn't been stripped correctly");
     free (string);
-}
-END_TEST
 
-/**
- *  Test mini_strip function giving a string with right and left spaces as the
- *  parameter.
- */
-START_TEST (test_mini_strip_string_with_right_left_spaces)
-{
-    char *string = strdup ("   " CHARSET "   ");
-
+    /* Regular string */
+    string = strdup (CHARSET);
     fail_unless (strcmp (mini_strip (string), CHARSET) == 0,
-                 "String with right and left spaces isn't stripped correctly");
-
+                 "String without spaces hasn't been stripped correctly");
     free (string);
 }
 END_TEST
 
 
 /**
- *  Creates a tests suite for 'mini-strip' functions.
+ *  Creates a tests suite for the 'mini-strip' module.
  *
- *  @return The return value is the tests suite for 'mini-strip' functions.
- *          The function returns NULL, if the tests suite can't be created.
+ *  @return The return value is the tests suite for the 'mini-strip' module.
  */
 Suite *
 check_mini_strip_suite_new ()
@@ -94,15 +103,15 @@ check_mini_strip_suite_new ()
     Suite *suite;
     TCase *tc_strip;
 
-    /* Create the tests suite for 'mini-strip' */
+    /* Create the tests suite for the 'mini-strip' module */
     suite = suite_create ("mini-strip");
 
-    /* Regular strip test cases */
-    tc_strip = tcase_create ("Strip");
+    /* 'mini_strip' function test cases */
+    tc_strip = tcase_create ("'mini_strip' function");
+    tcase_add_test (tc_strip, test_mini_strip_string_with_spaces);
     tcase_add_test (tc_strip, test_mini_strip_string_without_spaces);
-    tcase_add_test (tc_strip, test_mini_strip_string_with_right_left_spaces);
-    tcase_add_test (tc_strip, test_mini_strip_null);
     suite_add_tcase (suite, tc_strip);
 
     return suite;
 }
+
