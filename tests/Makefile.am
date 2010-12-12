@@ -1,6 +1,7 @@
 TESTS = check-main
 check_PROGRAMS = check-main
 check_main_SOURCES = check-main.c \
+                     check-mini-readline.c check-mini-readline.h \
                      check-mini-strip.c check-mini-strip.h \
                      $(top_builddir)/src/mini-strip.h
 

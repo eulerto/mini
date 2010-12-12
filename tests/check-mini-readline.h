@@ -1,5 +1,5 @@
 /*
- * check-main.c
+ * check-mini-readline.h
  * This file is part of mini, a library to parse INI files.
  *
  * Copyright (c) 2010, Francisco Javier Cuadrado <fcocuadrado@gmail.com>
@@ -28,33 +28,10 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <check.h>
-#include <stdio.h>
-
-#include "check-mini-strip.h"
-#include "check-mini-readline.h"
+#ifndef __CHECK_MINI_READLINE_H__
+#define __CHECK_MINI_READLINE_H__
 
 
-/**
- *  Main function of the tests suite, it executes all the tests.
- */
-int
-main (int argc, char *argv[])
-{
-    int number_failed;
-    Suite *strip_suite, *readline_suite;
-    SRunner *suite_runner;
+Suite *check_mini_readline_suite_new ();
 
-    /* Create all the suites */
-    strip_suite = check_mini_strip_suite_new ();
-    readline_suite = check_mini_readline_suite_new ();
-
-    /* Execute all the tests */
-    suite_runner = srunner_create (strip_suite);
-    srunner_add_suite (suite_runner, readline_suite);
-    srunner_run_all (suite_runner, CK_NORMAL);
-    number_failed = srunner_ntests_failed (suite_runner);
-    srunner_free (suite_runner);
-
-    return (number_failed == 0) ? 0 : -1;
-}
+#endif /* __CHECK_MINI_READLINE_H__ */
