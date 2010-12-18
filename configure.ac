@@ -6,9 +6,11 @@ AM_INIT_AUTOMAKE([1.11.1 foreign])
 LT_PREREQ([2.2.6])
 LT_INIT([dlopen win32-dll disable-static])
 
+PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
+
 AM_SILENT_RULES([yes])
 
 AC_PROG_CC
-AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile])
 AC_OUTPUT
 
