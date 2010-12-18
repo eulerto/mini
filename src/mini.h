@@ -1,5 +1,5 @@
 /*
- * mini-parser.h
+ * mini.h
  * This file is part of mini, a library to parse INI files.
  *
  * Copyright (c) 2010, Francisco Javier Cuadrado <fcocuadrado@gmail.com>
@@ -12,36 +12,43 @@
  *  2. Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- *  3. Neither the name of the Francisco Javier Cuadrado nor the names of its 
- *     contributors may be used to endorse or promote products derived from 
+ *  3. Neither the name of the Francisco Javier Cuadrado nor the names of its
+ *     contributors may be used to endorse or promote products derived from
  *     this software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
  * ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
  * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
  * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF 
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef __MINI_PARSER_H__
-#define __MINI_PARSER_H__
-
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#ifndef __MINI_H__
+#define __MINI_H__
 
 #include "mini-file.h"
-#include "mini-readline.h"
-#include "mini-strip.h"
 
 
 MiniFile *mini_parse_file (const char *file_name);
 
-#endif /* __MINI_PARSER_H__ */
+void mini_free (MiniFile *mini_file);
+
+unsigned int mini_get_number_of_sections (MiniFile *mini_file);
+
+unsigned int mini_get_number_of_keys (MiniFile *mini_file, const char *section);
+
+char *mini_get_section (MiniFile *mini_file, unsigned int section_pos);
+
+char *mini_get_key (MiniFile *mini_file, const char *section,
+                    unsigned int key_pos);
+
+char *mini_get_value (MiniFile *mini_file, const char *section,
+                      const char *key);
+
+#endif /* __MINI_H__ */
 
