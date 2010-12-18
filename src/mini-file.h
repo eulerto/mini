@@ -31,10 +31,6 @@
 #ifndef __MINI_FILE_H__
 #define __MINI_FILE_H__
 
-#include <assert.h>
-#include <stdlib.h>
-#include <string.h>
-
 typedef struct _SectionData SectionData;
 struct _SectionData {
     char *key;
@@ -69,6 +65,11 @@ unsigned int mini_file_get_number_of_sections (MiniFile *mini_file);
 
 unsigned int mini_file_get_number_of_keys (MiniFile *mini_file, 
                                            const char *section);
+
+char *mini_file_get_section (MiniFile *mini_file, unsigned int section_pos);
+
+char *mini_file_get_key (MiniFile *mini_file, const char *section,
+                         unsigned int key_pos);
 
 char *mini_file_get_value (MiniFile *mini_file, const char *section, 
                            const char *key);

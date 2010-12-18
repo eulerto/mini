@@ -28,6 +28,10 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <assert.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "mini-file.h"
 
 
@@ -156,9 +160,10 @@ mini_file_find_section (const MiniFile *mini_file, const char *section)
     assert (section != NULL);
 
     /* Search the given section into the given mini file */
-    for (sec = mini_file->section; sec != NULL; sec = sec->next)
+    for (sec = mini_file->section; sec != NULL; sec = sec->next) {
         if (strcmp (sec->name, section) == 0)
             break;
+    }
 
     return sec;
 }
@@ -180,9 +185,10 @@ mini_file_find_key (const Section *section, const char *key)
     assert (key != NULL);
 
     /* Search the given key into the data of the given section */
-    for (data = section->data; data != NULL; data = data->next)
+    for (data = section->data; data != NULL; data = data->next) {
         if (strcmp (data->key, key) == 0)
             break;
+    }
 
     return data;
 }
@@ -340,6 +346,79 @@ mini_file_get_number_of_keys (MiniFile *mini_file, const char *section)
         num_keys++;
 
     return num_keys;
+}
+
+/**
+ *  Gets the name of the section which is in the given position.
+ *
+ *  @param mini_file A MiniFile structure generated from an INI file.
+ *  @param section_pos Key's position.
+ *  @return The return value is the name of the section which is in the given
+ *          position.
+ *          The function returns NULL, if there isn't a section in the given
+ *          position.
+ */
+char *
+mini_file_get_section (MiniFile *mini_file, unsigned int section_pos)
+{
+    char *section_name = NULL;
+    int i;
+    Section *sec;
+
+    /* MiniFile can't be NULL */
+    assert (mini_file != NULL);
+
+    /* Search the given section's position */
+    sec = mini_file->section;
+    for (i = 0; (i < section_pos && sec != NULL); i++)
+        sec = sec->next;
+
+    /* There is a section in the given position */
+    if (sec != NULL)
+        section_name = sec->name;
+
+    return section_name;
+}
+
+/**
+ *  Gets the name of the key which is in the given section and in the given
+ *  position.
+ *
+ *  @param mini_file A MiniFile structure generated from an INI file.
+ *  @param section Section from where the key is gotten.
+ *  @param key_pos Key's position.
+ *  @return The return value is the name of the key which is in the given
+ *          section and in the given position.
+ *          The function returns NULL, if there isn't a key in the given section
+ *          and in the given position.
+ */
+char *
+mini_file_get_key (MiniFile *mini_file, const char *section,
+                   unsigned int key_pos)
+{
+    char *key_name = NULL;
+    int i;
+    Section *sec;
+    SectionData *data;
+
+    /* MiniFile and section can't be NULL */
+    assert (mini_file != NULL);
+    assert (section != NULL);
+
+    sec = mini_file_find_section (mini_file, section);
+    if (sec == NULL)
+        return NULL;
+
+    /* Search the given key's position */
+    data = sec->data;
+    for (i = 0; (i < key_pos && data != NULL); i++)
+        data = data->next;
+
+    /* There is a key in the given section and in the given position */
+    if (data != NULL)
+        key_name = data->key;
+
+    return key_name;
 }
 
 /**

@@ -29,8 +29,9 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 
-#include "mini-parser.h"
+#include "mini.h"
 
 
 /**
@@ -51,6 +52,8 @@ int
 main (int argc, char *argv[])
 {
     MiniFile *mini_file;
+    Section *sec;
+    SectionData *data;
 
     /* An INI file must be passed */
     if (argc != 2)
@@ -63,18 +66,28 @@ main (int argc, char *argv[])
         return -1;
     }
 
+    /* Debug output */
+    for (sec = mini_file->section; sec != NULL; sec = sec->next) {
+        fprintf (stderr, "SECTION: %s\n", sec->name);
+
+        for (data = sec->data; data != NULL; data = data->next) {
+            fprintf (stderr, "  KEY: %s\n", data->key);
+            fprintf (stderr, "  VALUE: %s\n", data->value);
+        }
+    }
+
     /* Use some functions of the mini library */
     printf ("Number of sections: %ld\n", 
-            mini_file_get_number_of_sections (mini_file));
+            mini_get_number_of_sections (mini_file));
 
     printf ("Number of keys (section2): %ld\n", 
-            mini_file_get_number_of_keys (mini_file, "section2"));
+            mini_get_number_of_keys (mini_file, "section2"));
 
     printf ("section1.key11 = %s\n", 
-            mini_file_get_value (mini_file, "section1", "key11"));
+            mini_get_value (mini_file, "section1", "key11"));
 
     /* Always remember to free MiniFile structure */
-    mini_file_free (mini_file);
+    mini_free (mini_file);
 
     return 0;
 }
