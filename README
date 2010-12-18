@@ -2,6 +2,38 @@
 
 Mini is a small library, written in C, to parse INI files.
 
+## Usage
+
+An example of how to use mini library:
+
+  #include <mini.h>
+
+  int
+  main (int argc, char *argv[])
+  {
+      char *ini_file = "/path/to/example.ini";
+      MiniFile *mini_file;
+
+      mini_file = mini_parse_file (ini_file);
+      if (mini_file == NULL)
+          return -1;
+
+      /* Manage INI file data using mini functions:
+       *  mini_get_number_of_sections
+       *  mini_get_number_of_keys
+       *  mini_get_section
+       *  mini_get_key
+       *  mini_get_value
+       */
+
+      /* Don't forget to free the data allocated by mini! */
+      mini_free (mini_file);
+
+      return 0;
+  }
+
+## Compilation
+
 To compile mini, you must do the following:
   * Create autotools files, from mini source directory:
      $ autoreconf --install
