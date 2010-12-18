@@ -1,5 +1,11 @@
-= Mini =
+# Mini
 
 Mini is a small library, written in C, to parse INI files.
 
+To compile mini, you must do the following:
+  * Create autotools files, from mini source directory:
+     $ autoreconf --install
 
+  * Now you can execute the classic configure, make and make install.
+  * Besides, mini includes some unit tests, you can run them executing:
+     $ make check
