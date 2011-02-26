@@ -2,6 +2,22 @@
 
 Mini is a small library, written in C, to parse INI files.
 
+## Compilation
+
+Before compile mini, you need the following:
+  * autoconf (>= 2.64)
+  * automake (>= 1.11.1)
+  * check (>= 0.9.4)
+  * libtool (>= 2.2.6)
+
+To compile mini, you must do the following:
+  * Create autotools files, from mini source directory:
+     $ autoreconf --install
+
+  * Now you can execute the classic configure, make and make install.
+  * Besides, mini includes some unit tests, you can run them executing:
+     $ make check
+
 ## Usage
 
 An example of how to use mini library:
@@ -32,12 +48,4 @@ An example of how to use mini library:
       return 0;
   }
 
-## Compilation
 
-To compile mini, you must do the following:
-  * Create autotools files, from mini source directory:
-     $ autoreconf --install
-
-  * Now you can execute the classic configure, make and make install.
-  * Besides, mini includes some unit tests, you can run them executing:
-     $ make check
