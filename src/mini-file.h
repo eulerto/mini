@@ -49,6 +49,7 @@ typedef struct _MiniFile MiniFile;
 struct _MiniFile {
     char *file_name;
     Section *section;
+    Section *__current_section;  /* Only used for insertions */
 };
 
 

@@ -207,6 +207,10 @@ mini_file_new (const char *file_name)
 {
     MiniFile *mini_file;
 
+    /* Filename can't be NULL */
+    if (file_name == NULL)
+        return NULL;
+
     mini_file = (MiniFile *) malloc (sizeof (MiniFile));
     if (mini_file == NULL)
         return NULL;
@@ -254,13 +258,23 @@ mini_file_insert_section (MiniFile *mini_file, const char *section_name)
     /* MiniFile can't be NULL */
     assert (mini_file != NULL);
 
-    section = mini_file_section_new (section_name);
-    if (section == NULL)
-        return NULL;
+    /* If the section already exists, it must not be inserted. Although it must
+     * be marked as the current section for future insertions */
+    section = mini_file_find_section (mini_file, section_name);
+    if (section == NULL) {
 
-    /* Insert at first position */
-    section->next = mini_file->section;
-    mini_file->section = section;
+        /* A new section must be created and inserted */
+        section = mini_file_section_new (section_name);
+        if (section == NULL)
+            return NULL;
+
+        /* Insert at first position */
+        section->next = mini_file->section;
+        mini_file->section = section;
+    }
+
+    /* Mark the inserted section as the current section */
+    mini_file->__current_section = section;
 
     return mini_file;
 }
@@ -283,10 +297,16 @@ mini_file_insert_key_and_value (MiniFile *mini_file, const char *key,
     /* MiniFile can't be NULL */
     assert (mini_file != NULL);
 
-    /* There isn't a section */
-    if (mini_file->section == NULL)
+    /* There isn't a section or current section */
+    if (mini_file->section == NULL || mini_file->__current_section == NULL)
         return NULL;
 
+    /* If the key already exists, it must not be inserted */
+    data = mini_file_find_key (mini_file->__current_section, key);
+    if (data != NULL)
+        return mini_file;
+
+    /* A new key-value pair must be created and inserted */
     data = mini_file_section_data_new (key, value);
     if (data == NULL)
         return NULL;
