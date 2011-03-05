@@ -127,6 +127,10 @@ mini_parse_line (MiniFile *mini_file, char *line)
             strncpy (value, &equal[1], value_len);
             value[value_len] = '\0';
 
+            /* Strip spaces before and after equality simbol ('=') */
+            key = mini_rstrip (key);
+            value = mini_lstrip (value);
+
             mini_file_tmp = mini_file_insert_key_and_value (mini_file, key, 
                                                             value);
             if (mini_file_tmp == NULL)
