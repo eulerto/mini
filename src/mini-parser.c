@@ -114,6 +114,10 @@ mini_parse_line (MiniFile *mini_file, char *line)
             for (key_len = 0; start[key_len] != '='; key_len++)
                 ;
 
+			/* Ignore whitespaces at right from key */
+			while (isspace (start[key_len - 1]))
+				key_len--;
+
             /* Get key string */
             key = (char *) malloc ((key_len + 1) * sizeof (char));
             if (key == NULL)
@@ -121,6 +125,10 @@ mini_parse_line (MiniFile *mini_file, char *line)
 
             strncpy (key, start, key_len);
             key[key_len] = '\0';
+
+			/* Ignore whitespaces at left from value */
+			while (isspace (equal[1]))
+				equal++;
 
             /* Get length of the value string */
             value_len = strlen (equal) - 1;
