@@ -89,6 +89,7 @@ mini_parse_line (MiniFile *mini_file, char *line)
 
         /* Comment */
         case ';':
+        case '#':
             /* Process comments here */
             break;
 
