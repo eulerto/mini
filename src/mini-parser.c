@@ -45,9 +45,20 @@ mini_parse_line (MiniFile *mini_file, char *line)
     char *section, *key, *value;
     size_t section_len, key_len, value_len;
     MiniFile *mini_file_tmp;
+	int i;
 
     /* Line can't be NULL */
     assert (line != NULL);
+
+	/* Strip comment (if any) after section or key/value string */
+	for (i = 0; line[i] != '\0'; i++)
+	{
+		if (line[i] == ';' || line[i] == '#')
+		{
+			line[i] = '\0';
+			break;
+		}
+	}
 
     /* Strip all whitespaces */
     start = mini_strip (line);
