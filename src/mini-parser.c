@@ -165,6 +165,7 @@ mini_parse_file (const char *file_name)
     char *line;
     FILE *file;
     MiniFile *mini_file;
+	int lineno = 1;
 
     /* Filename can't be NULL */
     assert (file_name != NULL);
@@ -184,10 +185,13 @@ mini_parse_file (const char *file_name)
     line = mini_readline (file);
     while (!feof (file) && (line != NULL)) {
 
-        if (mini_parse_line (mini_file, line) < 0)
+        if (mini_parse_line (mini_file, line) < 0) {
+			fprintf(stderr, "parse error at line %d\n", lineno);
             break;
+		}
 
         line = mini_readline (file);
+		lineno++;
     }
 
     fclose (file);
